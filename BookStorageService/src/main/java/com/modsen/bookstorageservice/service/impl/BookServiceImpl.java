@@ -39,8 +39,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookResponse updateBook(Long id, UpdateBookRequest updateBookRequest) {
         Book existingBook = findBookByIdOrThrow(id);
-        bookMapper.updateBookFromRequest(updateBookRequest, existingBook);
 
+        if (!existingBook.getIsbn().equals(updateBookRequest.isbn())) {
+            if (bookRepository.existsByIsbn(updateBookRequest.isbn())) {
+                throw new DuplicateResourceException(
+                        String.format(ErrorMessages.DUPLICATE_RESOURCE_MESSAGE, "Book", "ISBN"));
+            }
+        }
+
+        bookMapper.updateBookFromRequest(updateBookRequest, existingBook);
         Book updatedBook = bookRepository.save(existingBook);
         return bookMapper.toBookResponse(updatedBook);
     }
