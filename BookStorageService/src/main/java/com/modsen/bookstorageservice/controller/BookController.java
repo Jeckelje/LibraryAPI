@@ -39,7 +39,7 @@ public class BookController implements BookAPI {
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void softDeleteBook(@PathVariable Long id) {

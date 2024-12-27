@@ -51,7 +51,7 @@ public class TrackerController implements TrackerAPI {
     }
 
     @DeleteMapping("/delete-by-book-id/{bookId}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Override
     public void softDeleteTrackerByBookId(@PathVariable Long bookId) {
         trackerService.softDeleteTrackerByBookId(bookId);
