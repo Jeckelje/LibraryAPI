@@ -1,5 +1,6 @@
 package com.modsen.bookstorageservice.service.impl;
 
+import com.modsen.bookstorageservice.config.RabbitMQConfig;
 import com.modsen.bookstorageservice.dto.request.CreateBookRequest;
 import com.modsen.bookstorageservice.dto.request.UpdateBookRequest;
 import com.modsen.bookstorageservice.dto.response.BookResponse;
@@ -24,7 +25,6 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final RabbitTemplate rabbitTemplate;
 
-    private String queueName;
 
     @Override
     public BookResponse createBook(CreateBookRequest createBookRequest) {
@@ -32,6 +32,11 @@ public class BookServiceImpl implements BookService {
 
         Book book = bookMapper.toBook(createBookRequest);
         Book savedBook = bookRepository.save(book);
+
+        Long savedBookId = savedBook.getId();
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_NAME, savedBookId);
+        System.out.println("Sent message: " + savedBookId);
 
         return bookMapper.toBookResponse(savedBook);
     }

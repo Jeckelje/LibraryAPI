@@ -1,5 +1,6 @@
 package com.modsen.booktrackerservice.service.Impl;
 
+import com.modsen.booktrackerservice.configuration.RabbitMQConfig;
 import com.modsen.booktrackerservice.dto.request.UpdateStatusRequest;
 import com.modsen.booktrackerservice.dto.response.TrackerResponse;
 import com.modsen.booktrackerservice.error.ErrorMessages;
@@ -23,7 +24,9 @@ public class TrackerServiceImpl implements TrackerService {
     private final TrackerMapper trackerMapper;
 
     @Override
+    @RabbitListener(queues = RabbitMQConfig.QUEUE_NAME)
     public TrackerResponse createTracker(Long bookId) {
+        System.out.println("Received message: " + bookId);
         checkTrackerExistenceByBookIdAndThrow(bookId);
 
         Tracker tracker = new Tracker();
