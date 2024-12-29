@@ -7,6 +7,7 @@
     <modules>
         <module>BookStorageService</module>
         <module>BookTrackerService</module>
+        <module>EurekaService</module>
     </modules>
 
     <dependencyManagement>
