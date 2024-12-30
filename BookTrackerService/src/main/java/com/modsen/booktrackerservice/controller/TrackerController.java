@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/tracker")
+@RequestMapping("/tracker")
 @Validated
 public class TrackerController implements TrackerAPI {
 
@@ -23,8 +23,8 @@ public class TrackerController implements TrackerAPI {
     @PostMapping("/create-tracker/{bookId}")
     @ResponseStatus(HttpStatus.CREATED)
     @Override
-    public TrackerResponse createTracker(@PathVariable Long bookId) {
-        return trackerService.createTracker(bookId);
+    public void createTracker(@PathVariable Long bookId) {
+        //return trackerService.createTracker(bookId);
     }
 
     @GetMapping("/get-all")

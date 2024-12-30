@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public interface TrackerService {
 
-    TrackerResponse createTracker(Long bookId);
+    void createTracker(Long bookId);
 
     List<TrackerResponse> getAllTrackersWhereStatusIsFree();
 

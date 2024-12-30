@@ -12,6 +12,8 @@ import com.modsen.booktrackerservice.repository.TrackerRepository;
 import com.modsen.booktrackerservice.service.TrackerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,19 +25,27 @@ public class TrackerServiceImpl implements TrackerService {
     private final TrackerRepository trackerRepository;
     private final TrackerMapper trackerMapper;
 
-    @Override
     @RabbitListener(queues = RabbitMQConfig.QUEUE_NAME)
-    public TrackerResponse createTracker(Long bookId) {
-        System.out.println("Received message: " + bookId);
-        checkTrackerExistenceByBookIdAndThrow(bookId);
+    @Override
+    public void createTracker(Long bookId) {
+        if (bookId == null) {
+            throw new IllegalArgumentException("Tracker ID cannot be null");
+        }
+        try {
+            checkTrackerExistenceByBookIdAndThrow(bookId);
 
-        Tracker tracker = new Tracker();
-        tracker.setBookId(bookId);
-        tracker.setStatus("free");
-        tracker.setTakeDate(null);
-        tracker.setReturnDate(null);
-        tracker.setDeleted(false);
-        return trackerMapper.toTrackerResponse(trackerRepository.save(tracker));
+            Tracker tracker = new Tracker();
+            tracker.setBookId(bookId);
+            tracker.setStatus("free");
+            tracker.setTakeDate(null);
+            tracker.setReturnDate(null);
+            tracker.setDeleted(false);
+            System.out.println("Received message: " + bookId);
+
+            Tracker savedTracker = trackerRepository.save(tracker);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override

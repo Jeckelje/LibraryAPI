@@ -8,6 +8,7 @@
         <module>BookStorageService</module>
         <module>BookTrackerService</module>
         <module>EurekaService</module>
+        <module>APIGateway</module>
     </modules>
 
     <dependencyManagement>

@@ -24,7 +24,7 @@ public interface TrackerAPI {
             @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content(schema = @Schema(implementation = AppError.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = AppError.class)))
     })
-    TrackerResponse createTracker(@PathVariable Long bookId);
+    void createTracker(@PathVariable Long bookId);
 
     @Operation(summary = "Get all trackers where status is free")
     @ApiResponses(value = {

@@ -61,9 +61,9 @@ public class ApplicationConfig {
                                         }
                                 ))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/books").hasRole("USER")
-                        .requestMatchers("/api/v1/user").hasRole("USER")
+                        .requestMatchers("/auth-books/**").permitAll()
+                        .requestMatchers("/books").hasRole("USER")
+                        .requestMatchers("/users-books").hasRole("USER")
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtTokenFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
